@@ -18,5 +18,12 @@
         "psr-4": {
             "DavidPeach\\EscAppScaffolder\\": "src/"
         }
+    },
+    "extra" : {
+        "laravel": {
+            "providers": [
+                "DavidPeach\\EscAppScaffolder\\EscAppScaffolderServiceProvider"
+            ]
+        }
     }
 }

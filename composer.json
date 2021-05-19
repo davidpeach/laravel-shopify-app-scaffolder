@@ -1,0 +1,22 @@
+{
+    "name": "davidpeach/esc-app-scaffolder",
+    "description": "Scaffolding shopify apps with often repeated steps",
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "David Peach",
+            "email": "mail@davideach.co.uk"
+        }
+    ],
+    "require": {
+        "davidpeach/laravel-base-command": "v0.1.1-alpha"
+    },
+    "autoload": {
+        "psr-4": {
+            "DavidPeach\\EscAppScaffolder\\": "src/"
+        }
+    }
+}

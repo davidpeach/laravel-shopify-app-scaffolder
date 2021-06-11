@@ -1,0 +1,17 @@
+<?php
+
+namespace Tests;
+
+abstract class EscTestCase extends TestCase
+{
+    use CreatesApplication;
+
+    /**
+     * Utility method for quickly disabling exception
+     * handling to get exception stack traces.
+     */
+    public function w($exceptions = [])
+    {
+        $this->withoutExceptionHandling($exceptions);
+    }
+}

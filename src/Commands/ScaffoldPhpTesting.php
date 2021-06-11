@@ -18,9 +18,10 @@ class ScaffoldPhpTesting extends StepBinary
 
     private function createEscTestCaseFile()
     {
-        file_put_contents(
-            base_path('tests/EscTestCase.php'),
-            file_get_contents(__DIR__ . '/../stubs/EscTestCase.stub')
+        $this->updateFile(
+            base_path('tests/TestCase.php'),
+            "use CreatesApplication;",
+            file_get_contents(__DIR__ . '/../stubs/TestCaseUtilityMethods.stub')
         );
     }
 }

@@ -1,10 +1,4 @@
-<?php
 
-namespace Tests;
-
-abstract class EscTestCase extends TestCase
-{
-    use CreatesApplication;
 
     /**
      * Utility method for quickly disabling exception
@@ -14,4 +8,3 @@ abstract class EscTestCase extends TestCase
     {
         $this->withoutExceptionHandling($exceptions);
     }
-}

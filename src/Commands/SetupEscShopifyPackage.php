@@ -7,60 +7,75 @@ use Symfony\Component\Process\Process;
 
 class SetupEscShopifyPackage extends StepAlways
 {
-	const PACKAGE_STRING = 'esc/shopify:v3.x-dev';
-	const SEARCH_STRING  = 'App\Providers\RouteServiceProvider::class,';
-	const PROVIDER_PATH  = 'Esc\Shopify\Providers\APIServiceProvider::class,';
+    const PACKAGE_STRING = 'esc/shopify:v3.x-dev';
+    const SEARCH_STRING = 'App\Providers\RouteServiceProvider::class,';
+    const INSERT_STRING = 'Esc\Shopify\Providers\APIServiceProvider::class,';
 
-	public function handle()
-	{
-		$this->installPackage();
-		$this->updateConfig();
-		$this->publishAssets();
-	}
+    public function handle()
+    {
+        $this->installPackage();
+        $this->updateConfig();
+        $this->publishAssets();
+        $this->createShopModel();
+        $this->addShopifyUserTraitToUserModel();
+    }
 
-	private function installPackage()
-	{
-		$process = new Process([
-			'composer',
-			'require',
-			self::PACKAGE_STRING,
-		]);
+    private function installPackage()
+    {
+        $process = new Process([
+            'composer',
+            'require',
+            self::PACKAGE_STRING,
+        ]);
 
-		$process->run();
+        $process->run();
 
-		$this->report($process->getOutput());
-	}
+        $this->report($process->getOutput());
+    }
 
-	private function updateConfig()
-	{
-		$configFileContents = file_get_contents(
-			base_path('config/app.php')
-		);
+    private function updateConfig()
+    {
+        $this->updateFile(
+            base_path('config/app.php'),
+            self::SEARCH_STRING,
+            "\n\n        " . self::INSERT_STRING
+        );
+    }
 
-		if (! strpos($configFileContents, self::PROVIDER_PATH) !== false) {
-			$configFileContents = str_replace(
-				self::SEARCH_STRING,
-				self::SEARCH_STRING . "\n\n        " . self::PROVIDER_PATH,
-				$configFileContents
-			);
-			file_put_contents(base_path('config/app.php'), $configFileContents);
-			$this->report('Laravel config file updated with Esc Shopify service provider');
-		} else {
-			$this->report('Laravel config already contains the Esc Shopify service provider');
-		}
-	}
+    private function publishAssets()
+    {
+        $process = new Process([
+            'php',
+            'artisan',
+            'vendor:publish',
+            '--provider=Esc\Shopify\Providers\APIServiceProvider',
+        ]);
 
-	private function publishAssets()
-	{
-		$process = new Process([
-			'php',
-			'artisan',
-			'vendor:publish',
-			'--provider=Esc\Shopify\Providers\APIServiceProvider',
-		]);
+        $process->run();
 
-		$process->run();
+        $this->report($process->getOutput());
+    }
 
-		$this->report($process->getOutput());
-	}
+    private function createShopModel()
+    {
+        file_put_contents(
+            app_path('Shop.php'),
+            file_get_contents(__DIR__ . '/../stubs/App_Shop.stub')
+        );
+    }
+
+    private function addShopifyUserTraitToUserModel()
+    {
+        $this->updateFile(
+            app_path('User.php'),
+            'use Illuminate\Notifications\Notifiable;',
+            'use Esc\Shopify\Traits\ShopifyUser;'
+        );
+
+        $this->updateFile(
+            app_path('User.php'),
+            'use Notifiable;',
+            "\n    " . 'use ShopifyUser;'
+        );
+    }
 }

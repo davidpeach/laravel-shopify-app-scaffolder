@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "davidpeach/laravel-base-command": "v0.1.1-alpha"
+        "davidpeach/laravel-base-command": "*"
     },
     "autoload": {
         "psr-4": {

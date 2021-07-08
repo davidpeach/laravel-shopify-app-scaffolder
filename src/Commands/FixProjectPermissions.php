@@ -13,10 +13,10 @@ class FixProjectPermissions extends StepBinary
 
     public function question()
     {
-        return "Would you like to fix the project permissions";
+        return 'Would you like to fix the project permissions';
     }
 
-    public function handle()
+    public function handle($string, $next)
     {
         $process = new Process(['whoami']);
         $process->run();
@@ -24,12 +24,14 @@ class FixProjectPermissions extends StepBinary
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+
         $process = new Process(['pwd']);
         $process->run();
         $this->workingDirectory = trim($process->getOutput());
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+
         $process = new Process([
             'chown',
             '-R',
@@ -40,5 +42,7 @@ class FixProjectPermissions extends StepBinary
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
+
+        return $next($string);
     }
 }

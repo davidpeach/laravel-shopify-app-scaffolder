@@ -11,7 +11,7 @@ class DetermineDatabaseSetup extends StepBinary
         return 'Do you want to setup your database connection in the .env file?';
     }
 
-    public function handle()
+    public function handle($string, $next)
     {
         $dbName = $this->ask('What is the name of your database?');
         $dbUser = $this->ask('What is your database user name?');
@@ -24,5 +24,7 @@ class DetermineDatabaseSetup extends StepBinary
         $fileContents = str_replace('DB_PASSWORD=', 'DB_PASSWORD=' . $dbPass, $fileContents);
 
         file_put_contents(base_path('.env'), $fileContents);
+
+        return $next($string);
     }
 }

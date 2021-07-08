@@ -6,7 +6,7 @@ use DavidPeach\BaseCommand\StepAlways;
 
 class PartnersSetupWalkThrough extends StepAlways
 {
-    public function handle()
+    public function handle($string, $next)
     {
         $this->report('Head to partners app creation');
         $this->report('add your App Name e.g. esc-your_name-project_name');
@@ -24,7 +24,6 @@ class PartnersSetupWalkThrough extends StepAlways
         $envFileContents = file_get_contents(base_path('.env'));
         $envFileContents = str_replace('APP_URL', '#APP_URL', $envFileContents);
         file_put_contents(base_path('.env'), $envFileContents);
-
         file_put_contents(base_path('.env'), 'APP_URL=' . $appUrl . PHP_EOL, FILE_APPEND);
 
         // give developer whitelist apis to paste into partners.
@@ -37,5 +36,7 @@ class PartnersSetupWalkThrough extends StepAlways
         $apiSecret = $this->ask('What is your Shopify App Api Secret?');
         $format = PHP_EOL . 'SHOPIFY_AUTH_METHOD="app-bridge"' . PHP_EOL . 'SHOPIFY_API_KEY="%s"' . PHP_EOL . 'SHOPIFY_API_SECRET="%s"' . PHP_EOL;
         file_put_contents(base_path('.env'), vsprintf($format, [$apiKey, $apiSecret]), FILE_APPEND);
+
+        return $next($string);
     }
 }

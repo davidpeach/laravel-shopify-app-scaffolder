@@ -11,13 +11,15 @@ class SetupEscShopifyPackage extends StepAlways
     const SEARCH_STRING = 'App\Providers\RouteServiceProvider::class,';
     const INSERT_STRING = 'Esc\Shopify\Providers\APIServiceProvider::class,';
 
-    public function handle()
+    public function handle($string, $next)
     {
         $this->installPackage();
         $this->updateConfig();
         $this->publishAssets();
         $this->createShopModel();
         $this->addShopifyUserTraitToUserModel();
+
+        return $next($string);
     }
 
     private function installPackage()
@@ -28,7 +30,11 @@ class SetupEscShopifyPackage extends StepAlways
             self::PACKAGE_STRING,
         ]);
 
-        $process->run();
+        $process->start();
+
+        $process->waitUntil(function ($type, $output) {
+            return strpos($output, 'Package manifest generated successfully') !== false;
+        });
 
         $this->report($process->getOutput());
     }
@@ -51,7 +57,11 @@ class SetupEscShopifyPackage extends StepAlways
             '--provider=Esc\Shopify\Providers\APIServiceProvider',
         ]);
 
-        $process->run();
+        $process->start();
+
+        $process->waitUntil(function ($type, $output) {
+            return strpos($output, 'Publishing complete') !== false;
+        });
 
         $this->report($process->getOutput());
     }

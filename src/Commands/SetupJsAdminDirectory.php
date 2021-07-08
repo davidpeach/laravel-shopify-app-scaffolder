@@ -9,21 +9,23 @@ class SetupJsAdminDirectory extends StepBinary
 {
     public function question()
     {
-        return "Would you like to setup the initial shopify admin directory?";
+        return 'Would you like to setup the initial shopify admin directory?';
     }
 
-    public function handle()
+    public function handle($string, $next)
     {
         $this->setupJsAdmin();
         $this->replaceWebRoutesFile();
         $this->setupAdminBladeFile();
         $this->setupAdminController();
+
+        return $next($string);
     }
 
     private function setupJsAdmin()
     {
         File::copyDirectory(
-            __DIR__.'/../stubs/admin',
+            __DIR__ . '/../stubs/admin',
             resource_path('js/admin')
         );
     }
@@ -46,7 +48,7 @@ class SetupJsAdminDirectory extends StepBinary
     private function setupAdminBladeFile()
     {
         File::copy(
-            __DIR__.'/../stubs/resources/views/app.blade.php.stub',
+            __DIR__ . '/../stubs/resources/views/app.blade.php.stub',
             resource_path('views/app.blade.php')
         );
     }
@@ -58,7 +60,7 @@ class SetupJsAdminDirectory extends StepBinary
         );
 
         File::copy(
-            __DIR__.'/../stubs/app/Http/Controllers/Admin/ShopifyAdminController.php.stub',
+            __DIR__ . '/../stubs/app/Http/Controllers/Admin/ShopifyAdminController.php.stub',
             app_path('Http/Controllers/Admin/ShopifyAdminController.php')
         );
     }

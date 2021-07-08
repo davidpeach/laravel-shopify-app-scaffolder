@@ -1,26 +1,28 @@
 <?php
+
 namespace DavidPeach\EscAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepBinary;
-use Symfony\Component\Process\Process;
 
 class ScaffoldPhpTesting extends StepBinary
 {
     public function question()
     {
-        return "Would you like to setup PHP Tests for this project?";
+        return 'Would you like to setup PHP Tests for this project?';
     }
 
-    public function handle()
+    public function handle($string, $next)
     {
         $this->createEscTestCaseFile();
+
+        return $next($string);
     }
 
     private function createEscTestCaseFile()
     {
         $this->updateFile(
             base_path('tests/TestCase.php'),
-            "use CreatesApplication;",
+            'use CreatesApplication;',
             file_get_contents(__DIR__ . '/../stubs/TestCaseUtilityMethods.stub')
         );
     }

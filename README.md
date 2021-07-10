@@ -2,36 +2,37 @@
 
 Quick-starting shopify app development for Eastide Co.
 
-## Usage
-
-### Before scaffolding
-Setup your local nginx conf for the app you are building.
-Setup a development store in Shopify Partners.
-Setup an app in Shopify Partners.
-Update your `.env` file `APP_URL` value to be the "App URL" you set up in Partners.
-e.g:
-```bash
-APP_URL=https://my-awesome-app.local
-```
-
-Add your env variables to you local app `.env` file:
-```bash
-SHOPIFY_AUTH_METHOD="app-bridge"
-SHOPIFY_API_KEY="your_shopify_app_api_key_from_partners"
-SHOPIFY_API_SECRET="your_shopify_app_api_secret_from_partners"
-```
-
-
-### Install
+## Installation
 
 ```bash
 composer require --dev davidpeach/esc-app-scaffolder
 ```
 
-### Run the artisan command
+## Before Usage
+
+### Shopify Partner ID
+One step will attempt to open a Chrome browser tab directly to Shopify Partners for you.
+
+To enable it to do so, please add your Shopify Partner id into you project's `.env` file:
+```bash
+# For example
+SHOPIFY_PARTNERS_ID=12345
+```
+
+### Setup your local Nginx configuration
+Setup your local nginx configuration for the app you are building, so that it is available at a valid local URL.
+
+You will also need a self-signed SSL certificate. This is a stipulation of Shopify and their Apps.
+
+```bash
+# Examples coming soon
+```
+
+
+## Usage
 
 Run the following command, answering yes / no to the questions you are asked.
 
 ```bash
-php artisan esc:scaffold
+php artisan esc:utils:scaffold
 ```

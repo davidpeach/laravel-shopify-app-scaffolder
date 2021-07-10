@@ -14,6 +14,7 @@ use DavidPeach\EscAppScaffolder\Commands\SetupJsAdminDirectory;
 use DavidPeach\EscAppScaffolder\Commands\DetermineDatabaseSetup;
 use DavidPeach\EscAppScaffolder\Commands\MigrateAndSeed;
 use DavidPeach\EscAppScaffolder\Commands\OpenAppInChromeBrowser;
+use DavidPeach\EscAppScaffolder\Commands\OpenPartnersForLogin;
 use DavidPeach\EscAppScaffolder\Commands\ReloadEnv;
 use DavidPeach\EscAppScaffolder\Commands\RunNpmDev;
 use DavidPeach\EscAppScaffolder\Commands\SafetyCheck;
@@ -25,6 +26,7 @@ class EscScaffoldingCommand extends BaseCommand
     protected $commands = [
         SafetyCheck::class,
         SetupEscShopifyPackage::class,
+        OpenPartnersForLogin::class,
         PartnersSetupWalkThrough::class,
         DetermineDatabaseSetup::class,
         AddMixVariablesToEnv::class,

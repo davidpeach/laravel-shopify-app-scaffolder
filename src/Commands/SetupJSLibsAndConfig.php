@@ -2,10 +2,9 @@
 
 namespace DavidPeach\EscAppScaffolder\Commands;
 
-use DavidPeach\BaseCommand\StepBinary;
-use Symfony\Component\Process\Process;
+use DavidPeach\BaseCommand\StepAlways;
 
-class SetupJSLibsAndConfig extends StepBinary
+class SetupJSLibsAndConfig extends StepAlways
 {
     const NPM_PACKAGES = [
         '@eastsideco/polaris-vue' => '^0.1.19',
@@ -38,8 +37,10 @@ class SetupJSLibsAndConfig extends StepBinary
         return 'Would you like to install the recommended NPM packages?';
     }
 
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
+        $feedback->feedback('JavaScript libraries and Config', 'Setting up the required JavaScript libraries and configuration files for your app.');
+
         $this->installWebpackMixFile();
         $this->setupTypescriptDefinitionsFile();
         $this->setupTypescriptShims();
@@ -47,7 +48,9 @@ class SetupJSLibsAndConfig extends StepBinary
         $this->setupEsLint();
         $this->installNpmPackages();
 
-        return $next($string);
+        $feedback->advance('', '✅ Libraries and configuration complete.');
+
+        return $next($feedback);
     }
 
     private function installWebpackMixFile()
@@ -63,8 +66,6 @@ class SetupJSLibsAndConfig extends StepBinary
             base_path('webpack.mix.js'),
             file_get_contents(__DIR__ . '/../stubs/webpack.mix.stub')
         );
-
-        $this->report('webpack.mix.js file swapped for updated version');
     }
 
     private function setupTypescriptDefinitionsFile()
@@ -73,8 +74,6 @@ class SetupJSLibsAndConfig extends StepBinary
             resource_path('js/types.d.ts'),
             "// Type definitions\n\n// Start of ESC Generated Types\n\n// End of ESC Generated Types"
         );
-
-        $this->report('js/types.d.ts added');
     }
 
     private function setupTypescriptShims()
@@ -88,8 +87,6 @@ class SetupJSLibsAndConfig extends StepBinary
             resource_path('js/vue.shim.d.ts'),
             file_get_contents(__DIR__ . '/../stubs/vue.shim.d.ts.stub')
         );
-
-        $this->report('Typescript shims added');
     }
 
     private function setupTsConfig()
@@ -122,27 +119,20 @@ class SetupJSLibsAndConfig extends StepBinary
             '--save-dev',
         ], $packages);
 
-        $process = new Process(array_values($commands));
+        $output = $this->asyncProcess(
+            array_values($commands),
+            function ($string) {
+                preg_match('/added \d+ packages from \d+ contributors/', $string, $matches);
+                return !empty($matches);
+            }
+        );
 
-        $process->start();
-
-        $process->waitUntil(function ($type, $output) {
-            preg_match('/added \d+ packages from \d+ contributors/', $output, $matches);
-            return !empty($matches);
-        });
-
-        $process = new Process([
-            'npm',
-            'install',
-        ]);
-
-        $process->start();
-
-        $process->waitUntil(function ($type, $output) {
-            preg_match('/added \d+ packages from \d+ contributors/', $output, $matches);
-            return !empty($matches);
-        });
-
-        $this->report($process->getOutput());
+        $output = $this->asyncProcess(
+            ['npm', 'install'],
+            function ($string) {
+                preg_match('/added \d+ packages from \d+ contributors/', $string, $matches);
+                return !empty($matches);
+            }
+        );
     }
 }

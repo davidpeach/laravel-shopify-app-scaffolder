@@ -2,28 +2,36 @@
 
 namespace DavidPeach\EscAppScaffolder\Commands;
 
-use DavidPeach\BaseCommand\StepBinary;
+use DavidPeach\BaseCommand\StepAlways;
 use Illuminate\Support\Facades\File;
 
-class SetupJsAdminDirectory extends StepBinary
+class SetupJsAdminDirectory extends StepAlways
 {
     public function question()
     {
         return 'Would you like to setup the initial shopify admin directory?';
     }
 
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
+        $feedback->feedback('Shopify admin directory', 'Setting up the JS admin directory for the Shopify admin.');
+
         $this->setupJsAdmin();
         $this->replaceWebRoutesFile();
         $this->setupAdminBladeFile();
         $this->setupAdminController();
 
-        return $next($string);
+        $feedback->advance('', '✅ Admin directory set up.');
+
+        return $next($feedback);
     }
 
     private function setupJsAdmin()
     {
+        if (File::exists(resource_path('js/admin'))) {
+            return;
+        }
+
         File::copyDirectory(
             __DIR__ . '/../stubs/admin',
             resource_path('js/admin')
@@ -32,7 +40,10 @@ class SetupJsAdminDirectory extends StepBinary
 
     private function replaceWebRoutesFile()
     {
-        // Backup the existing routes/web.php
+        if (File::exists(base_path('routes/web.php.bak'))) {
+            return;
+        }
+
         file_put_contents(
             base_path('routes/web.php.bak'),
             file_get_contents(base_path('routes/web.php'))
@@ -47,6 +58,10 @@ class SetupJsAdminDirectory extends StepBinary
 
     private function setupAdminBladeFile()
     {
+        if (File::exists(resource_path('views/app.blade.php'))) {
+            return;
+        }
+
         File::copy(
             __DIR__ . '/../stubs/resources/views/app.blade.php.stub',
             resource_path('views/app.blade.php')
@@ -55,6 +70,10 @@ class SetupJsAdminDirectory extends StepBinary
 
     private function setupAdminController()
     {
+        if (File::exists(app_path('Http/Controllers/Admin'))) {
+            return;
+        }
+
         File::makeDirectory(
             app_path('Http/Controllers/Admin')
         );

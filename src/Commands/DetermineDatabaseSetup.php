@@ -2,17 +2,19 @@
 
 namespace DavidPeach\EscAppScaffolder\Commands;
 
-use DavidPeach\BaseCommand\StepBinary;
+use DavidPeach\BaseCommand\StepAlways;
 
-class DetermineDatabaseSetup extends StepBinary
+class DetermineDatabaseSetup extends StepAlways
 {
     public function question()
     {
         return 'Do you want to setup your database connection in the .env file?';
     }
 
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
+        $feedback->feedback('Database configuration', 'Tell us about your local database connection details.');
+
         $dbName = $this->ask('What is the name of your database?');
         $dbUser = $this->ask('What is your database user name?');
         $dbPass = $this->ask('What is your database password?');
@@ -25,6 +27,8 @@ class DetermineDatabaseSetup extends StepBinary
 
         file_put_contents(base_path('.env'), $fileContents);
 
-        return $next($string);
+        $feedback->advance('', '✅ Database configuration done.');
+
+        return $next($feedback);
     }
 }

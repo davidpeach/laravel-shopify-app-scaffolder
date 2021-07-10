@@ -7,8 +7,10 @@ use Symfony\Component\Process\Process;
 
 class OpenAppInChromeBrowser extends StepAlways
 {
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
+        $feedback->feedback('Final Installation.', 'Installing your app into your dev store and opening in a chrome browser.');
+
         $process = new Process([
             'google-chrome',
             '--new-tab',
@@ -17,6 +19,8 @@ class OpenAppInChromeBrowser extends StepAlways
 
         $process->run();
 
-        return $next($string);
+        $feedback->advance('', '✅ App opening in chrome browser');
+
+        return $next($feedback);
     }
 }

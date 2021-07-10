@@ -3,7 +3,6 @@
 namespace DavidPeach\EscAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
-use Symfony\Component\Process\Process;
 
 class SetupEscShopifyPackage extends StepAlways
 {
@@ -11,32 +10,31 @@ class SetupEscShopifyPackage extends StepAlways
     const SEARCH_STRING = 'App\Providers\RouteServiceProvider::class,';
     const INSERT_STRING = 'Esc\Shopify\Providers\APIServiceProvider::class,';
 
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
+        $feedback->feedback('ESC Shopify Package', 'Setting up the ESC Shopify package composer package.');
+
         $this->installPackage();
         $this->updateConfig();
         $this->publishAssets();
         $this->createShopModel();
         $this->addShopifyUserTraitToUserModel();
 
-        return $next($string);
+        $feedback->advance('', '✅ ESC Shopify package setup complete');
+
+        return $next($feedback);
     }
 
     private function installPackage()
     {
-        $process = new Process([
-            'composer',
-            'require',
-            self::PACKAGE_STRING,
-        ]);
+        $output = $this->asyncProcess(
+            ['composer', 'require', self::PACKAGE_STRING],
+            function ($string) {
+                return strpos($string, 'Package manifest generated successfully') !== false;
+            }
+        );
 
-        $process->start();
-
-        $process->waitUntil(function ($type, $output) {
-            return strpos($output, 'Package manifest generated successfully') !== false;
-        });
-
-        $this->report($process->getOutput());
+        //$this->report($output);
     }
 
     private function updateConfig()
@@ -50,20 +48,14 @@ class SetupEscShopifyPackage extends StepAlways
 
     private function publishAssets()
     {
-        $process = new Process([
-            'php',
-            'artisan',
-            'vendor:publish',
-            '--provider=Esc\Shopify\Providers\APIServiceProvider',
-        ]);
+        $output = $this->asyncProcess(
+            ['php', 'artisan', 'vendor:publish', '--provider=Esc\Shopify\Providers\APIServiceProvider'],
+            function ($string) {
+                return strpos($string, 'Publishing complete') !== false;
+            }
+        );
 
-        $process->start();
-
-        $process->waitUntil(function ($type, $output) {
-            return strpos($output, 'Publishing complete') !== false;
-        });
-
-        $this->report($process->getOutput());
+        //$this->report($output);
     }
 
     private function createShopModel()

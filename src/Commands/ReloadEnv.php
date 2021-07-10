@@ -8,11 +8,15 @@ use Illuminate\Foundation\Bootstrap\LoadConfiguration;
 
 class ReloadEnv extends StepAlways
 {
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
+        $feedback->feedback('Reloading .env', 'Reloading your .env file.');
+
         with(Dotenv::create(app()->environmentPath(), app()->environmentFile()))->overload();
         with(new LoadConfiguration())->bootstrap(app());
 
-        return $next($string);
+        $feedback->advance('', '✅ .env file reloaded');
+
+        return $next($feedback);
     }
 }

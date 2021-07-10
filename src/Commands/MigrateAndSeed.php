@@ -3,38 +3,31 @@
 namespace DavidPeach\EscAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
-use Symfony\Component\Process\Process;
 
 class MigrateAndSeed extends StepAlways
 {
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
-        $process = new Process([
-            'php',
-            'artisan',
-            'migrate:fresh',
-        ]);
+        $feedback->feedback('Database migration and seeding', 'Migrating your database and running any database seeder classes.');
 
-        $process->start();
+        $output = $this->asyncProcess(
+            ['php', 'artisan', 'migrate:fresh'],
+            function ($string) {
+                return strpos($string, 'Migrated:  2019_08_19_000000_create_failed_jobs_table') !== false;
+            }
+        );
 
-        $process->waitUntil(function ($type, $output) {
-            return strpos($output, 'Migrated:  2019_08_19_000000_create_failed_jobs_table') !== false;
-        });
+        $feedback->feedback('', '✅ Database migration complete.');
 
-        $this->report($process->getOutput());
+        $output = $this->asyncProcess(
+            ['php', 'artisan', 'db:seed'],
+            function ($string) {
+                return strpos($string, 'Database seeding completed successfully') !== false;
+            }
+        );
 
-        $process = new Process([
-            'php',
-            'artisan',
-            'db:seed',
-        ]);
-        $process->start();
-        $process->waitUntil(function ($type, $output) {
-            return strpos($output, 'Database seeding completed successfully') !== false;
-        });
+        $feedback->advance('', '✅ Database seeding complete.');
 
-        $this->report($process->getOutput());
-
-        return $next($string);
+        return $next($feedback);
     }
 }

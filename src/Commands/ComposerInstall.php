@@ -3,25 +3,22 @@
 namespace DavidPeach\EscAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
-use Symfony\Component\Process\Process;
 
 class ComposerInstall extends StepAlways
 {
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
-        $process = new Process([
-            'composer',
-            'install',
-        ]);
+        $feedback->feedback('Composer Install', 'Installing packages via composer.');
 
-        $process->start();
+        $output = $this->asyncProcess(
+            ['composer', 'install'],
+            function ($string) {
+                return strpos($string, 'Package manifest generated successfully') !== false;
+            }
+        );
 
-        $process->waitUntil(function ($type, $output) {
-            return strpos($output, 'Package manifest generated successfully') !== false;
-        });
+        $feedback->advance('', '✅ Packages installed.');
 
-        $this->report($process->getOutput());
-
-        return $next($string);
+        return $next($feedback);
     }
 }

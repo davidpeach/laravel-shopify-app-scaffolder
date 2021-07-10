@@ -3,25 +3,22 @@
 namespace DavidPeach\EscAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 class RunNpmDev extends StepAlways
 {
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
-        $process = new Process([
-            'npm',
-            'run',
-            'dev',
-        ]);
+        $feedback->feedback('NPM compiling', 'Compiling your front-end assets with npm.');
 
-        $process->run();
+        $output = $this->asyncProcess(
+            ['npm', 'run', 'dev'],
+            function ($string) {
+                return true;
+            }
+        );
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
+        $feedback->advance('', '✅ Front-end assets compiled.');
 
-        return $next($string);
+        return $next($feedback);
     }
 }

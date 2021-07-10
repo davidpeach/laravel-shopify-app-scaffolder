@@ -6,8 +6,10 @@ use DavidPeach\BaseCommand\StepAlways;
 
 class PartnersSetupWalkThrough extends StepAlways
 {
-    public function handle($string, $next)
+    public function handle($feedback, $next)
     {
+        $feedback->feedback('Shopify Partners Setup', 'Walking you through setting up a shopify app in Shopify partners account.');
+
         $this->report('Head to partners app creation');
         $this->report('add your App Name e.g. esc-your_name-project_name');
 
@@ -18,7 +20,7 @@ class PartnersSetupWalkThrough extends StepAlways
         $appUrl = $this->ensurePrefixedWith($appUrl, 'https://');
 
         $this->report('<comment>' . $appUrl . '/app</comment>');
-        $this->confirm('Paste the full url into the App URL field in parters then press enter');
+        $this->confirm('Paste the full url into the App URL field in partners then press enter');
 
         // Add url to the .env file
         $envFileContents = file_get_contents(base_path('.env'));
@@ -27,7 +29,7 @@ class PartnersSetupWalkThrough extends StepAlways
         file_put_contents(base_path('.env'), 'APP_URL=' . $appUrl . PHP_EOL, FILE_APPEND);
 
         // give developer whitelist apis to paste into partners.
-        $format = "<comment>%s/oauth\n%s/oauth/\n%s/oauth/done\n%s/oauth/done/</comment>";
+        $format = "<comment>%s/oauth\n %s/oauth/\n %s/oauth/done\n %s/oauth/done/</comment>";
         $this->report(vsprintf($format, [$appUrl, $appUrl, $appUrl, $appUrl]));
         $this->confirm('Press enter when you have pasted the four urls into "Allowed redirection URL(s)" textarea.');
 
@@ -37,6 +39,8 @@ class PartnersSetupWalkThrough extends StepAlways
         $format = PHP_EOL . 'SHOPIFY_AUTH_METHOD="app-bridge"' . PHP_EOL . 'SHOPIFY_API_KEY="%s"' . PHP_EOL . 'SHOPIFY_API_SECRET="%s"' . PHP_EOL;
         file_put_contents(base_path('.env'), vsprintf($format, [$apiKey, $apiSecret]), FILE_APPEND);
 
-        return $next($string);
+        $feedback->advance('', '✅ Partners account ready');
+
+        return $next($feedback);
     }
 }

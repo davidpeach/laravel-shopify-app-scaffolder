@@ -1,0 +1,176 @@
+module.exports = {
+    "env": {
+        "browser": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "eslint-plugin-import",
+        "@typescript-eslint",
+        "ban",
+    ],
+    "rules": {
+        // Put all of the available overloads of a function in the same place, avoids confusion
+        "@typescript-eslint/adjacent-overload-signatures": "error",
+        // Use T[] instead of Array<T> to describe arrays
+        "@typescript-eslint/array-type": [
+            "error",
+            {
+                "default": "array"
+            }
+        ],
+        // Almost always unintentional
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/ban-ts-comment": "error",
+        "@typescript-eslint/consistent-type-assertions": "error",
+        // If you prefer smaller indents, use a feature in your favourite editor to adjust the
+        // size of indentation independantly from the number of characters which represent it.
+        // i.e. https://marketplace.visualstudio.com/items?itemName=kylepaulsen.stretchy-spaces
+        "@typescript-eslint/indent": ["error", 4],
+        "@typescript-eslint/member-delimiter-style": [
+            "error",
+            {
+                "multiline": {
+                    "delimiter": "semi",
+                    "requireLast": true
+                },
+                "singleline": {
+                    "delimiter": "semi",
+                    "requireLast": false
+                }
+            }
+        ],
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                selector: 'default',
+                format: ['camelCase', 'snake_case', 'UPPER_CASE', 'PascalCase'],
+            },
+            // Variables should by  camelCase or UPPER_CASE (for constants)
+            {
+                selector: 'variable',
+                format: ['camelCase', 'UPPER_CASE', 'snake_case'],
+            },
+            // Classes are PascalCase
+            {
+                selector: 'typeLike',
+                format: ['PascalCase'],
+            },
+            // Backing fields
+            {
+                selector: 'classProperty',
+                modifiers: ['private'],
+                format: ['camelCase'],
+                leadingUnderscore: 'allow',
+                trailingUnderscore: 'forbid',
+
+            },
+        ],
+        // Discourage the use of <any>
+        "@typescript-eslint/no-explicit-any": "error",
+        // You should be using ES6 import/exports
+        "@typescript-eslint/no-require-imports": "error",
+        // Don't compare to true/false
+        "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
+        // You should be using ES6 import/exports
+        "@typescript-eslint/no-var-requires": "error",
+        // for-of is cleaner when you're only accessing values
+        "@typescript-eslint/prefer-for-of": "error",
+        "@typescript-eslint/semi": [
+            "error",
+            "always"
+        ],
+        // You should be using ES6 import/exports
+        "@typescript-eslint/triple-slash-reference": "error",
+        // Helps identify when you can avoid using function overloads to write simpler code
+        "@typescript-eslint/unified-signatures": "error",
+        // Do () => x instead of () => { return x; }
+        "arrow-body-style": "error",
+        // Helps readability, especially with longer arg types
+        "arrow-parens": [
+            "error",
+            "always"
+        ],
+        // Almost always unintentional
+        "constructor-super": "error",
+        // This is a common source of bugs
+        "curly": "error",
+        "eol-last": "error",
+        "id-blacklist": "error",
+        "id-match": "error",
+        // Unix line endings
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        // Helps with accessibility for developers who need larger font sizes,
+        // as well as those who prefer to split their code editor vertically
+        "max-len": [
+            "error",
+            {
+                "code": 120
+            }
+        ],
+        // Not safe for production, just put breakpoints in your browser instead
+        "no-debugger": "error",
+        // Almost always unintentional
+        "no-duplicate-case": "error",
+        "no-fallthrough": "error",
+        "space-before-function-paren": ["error", "never"],
+        "no-restricted-imports": [
+            "error",
+            "jQuery",
+            "jquery",
+            "$",
+            "slick",
+            "slick-slider",
+            "slick-carousel"
+        ],
+        // Almost always unintentional
+        "no-template-curly-in-string": "error",
+        // Text files shouldn't contain trailing whitespace
+        "no-trailing-spaces": "error",
+        "no-underscore-dangle": [
+            "error",
+            {
+                "allowAfterThis": true,
+            },
+        ],
+        // Use const and let instead
+        "no-var": "error",
+        // Prefer to not quote keys, unless needed
+        "quote-props": [
+            "error",
+            "as-needed"
+        ],
+        "radix": "error",
+        // Almost always unintentional
+        "use-isnan": "error",
+        "ban/ban": [
+            2,
+            {
+                "name": "$",
+                "message": "Please don't"
+            },
+            {
+                "name": "jQuery",
+                "message": "Please don't"
+            },
+            {
+                "name": "jquery",
+                "message": "Please don't"
+            },
+            // Use for-of (to iterate values) or for-in (to iterate keys) instead
+            {
+                "name": [
+                    "*",
+                    "forEach"
+                ],
+                "message": "Use for-of (to iterate values) or for-in (to iterate keys) instead"
+            }
+        ]
+    }
+};

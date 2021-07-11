@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 
@@ -8,7 +8,10 @@ class ComposerInstall extends StepAlways
 {
     public function handle($feedback, $next)
     {
-        $feedback->feedback('Composer Install', 'Installing packages via composer.');
+        $feedback->feedback(
+            'Installing packages via composer.',
+            'Composer Install'
+        );
 
         $output = $this->asyncProcess(
             ['composer', 'install'],
@@ -17,7 +20,7 @@ class ComposerInstall extends StepAlways
             }
         );
 
-        $feedback->advance('', '✅ Packages installed.');
+        $feedback->advance('✅ Packages installed.');
 
         return $next($feedback);
     }

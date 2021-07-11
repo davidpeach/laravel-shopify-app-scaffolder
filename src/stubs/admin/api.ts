@@ -20,7 +20,7 @@ export class ApiClient {
 
     http: AxiosInstance = apiInstance;
 
-    //
+    // Add your api functions here :)
 }
 
 export const api = new ApiClient();

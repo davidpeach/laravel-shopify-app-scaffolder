@@ -1,19 +1,17 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 
 class DetermineDatabaseSetup extends StepAlways
 {
-    public function question()
-    {
-        return 'Do you want to setup your database connection in the .env file?';
-    }
-
     public function handle($feedback, $next)
     {
-        $feedback->feedback('Database configuration', 'Tell us about your local database connection details.');
+        $feedback->feedback(
+            'Tell us about your local database connection details.',
+            'Database configuration'
+        );
 
         $dbName = $this->ask('What is the name of your database?');
         $dbUser = $this->ask('What is your database user name?');
@@ -27,7 +25,7 @@ class DetermineDatabaseSetup extends StepAlways
 
         file_put_contents(base_path('.env'), $fileContents);
 
-        $feedback->advance('', '✅ Database configuration done.');
+        $feedback->advance('✅ Database configuration done.');
 
         return $next($feedback);
     }

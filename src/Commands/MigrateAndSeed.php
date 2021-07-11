@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 
@@ -8,7 +8,10 @@ class MigrateAndSeed extends StepAlways
 {
     public function handle($feedback, $next)
     {
-        $feedback->feedback('Database migration and seeding', 'Migrating your database and running any database seeder classes.');
+        $feedback->feedback(
+            'Migrating your database and running any database seeder classes.',
+            'Database migration and seeding'
+        );
 
         $output = $this->asyncProcess(
             ['php', 'artisan', 'migrate:fresh'],
@@ -17,7 +20,7 @@ class MigrateAndSeed extends StepAlways
             }
         );
 
-        $feedback->feedback('', '✅ Database migration complete.');
+        $feedback->feedback('✅ Database migration complete.');
 
         $output = $this->asyncProcess(
             ['php', 'artisan', 'db:seed'],
@@ -26,7 +29,7 @@ class MigrateAndSeed extends StepAlways
             }
         );
 
-        $feedback->advance('', '✅ Database seeding complete.');
+        $feedback->advance('✅ Database seeding complete.');
 
         return $next($feedback);
     }

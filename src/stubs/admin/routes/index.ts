@@ -9,15 +9,11 @@ export const router = new VueRouter({
     base: '/app/',
     mode: 'history',
     routes: [
-        // Start of ESC Routes
-
         {
             path: '/',
             name: 'Demo',
             component: Demo,
         },
-
-        // End of ESC Routes
     ],
 });
 

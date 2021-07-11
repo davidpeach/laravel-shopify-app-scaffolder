@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 use Symfony\Component\Process\Process;
@@ -10,20 +10,18 @@ class FixProjectPermissions extends StepAlways
     private $user;
     private $workingDirectory;
 
-    public function question()
-    {
-        return 'Would you like to fix the project permissions';
-    }
-
     public function handle($feedback, $next)
     {
-        $feedback->feedback('File and folder permissions.', 'Attempting to fix your app file and folder permissions');
+        $feedback->feedback(
+            'Attempting to fix your app file and folder permissions',
+            'File and folder permissions.'
+        );
 
         $process = new Process(['whoami']);
         $process->run();
         $this->user = trim($process->getOutput());
         if (!$process->isSuccessful()) {
-            $feedback->advance('', '❌ Could not determine your OS username for setting app file and folder owning permissions.');
+            $feedback->advance('❌ Could not determine your OS username for setting app file and folder owning permissions.');
             return $next($feedback);
         }
 
@@ -31,7 +29,7 @@ class FixProjectPermissions extends StepAlways
         $process->run();
         $this->workingDirectory = trim($process->getOutput());
         if (!$process->isSuccessful()) {
-            $feedback->advance('', '❌ Could not determine your working directory for setting app file and folder owning permissions.');
+            $feedback->advance('❌ Could not determine your working directory for setting app file and folder owning permissions.');
             return $next($feedback);
         }
 
@@ -40,7 +38,7 @@ class FixProjectPermissions extends StepAlways
         $ask = $this->ask($formattedQuestion, false);
 
         if (strtolower($ask) !== 'yes') {
-            $feedback->advance('', '🙈 Okay, I will leave your permissions as they are.');
+            $feedback->advance('🙈 Okay, I will leave your permissions as they are.');
             return $next($feedback);
         }
 
@@ -52,7 +50,7 @@ class FixProjectPermissions extends StepAlways
         ]);
         $process->run();
         if (!$process->isSuccessful()) {
-            $feedback->advance('', '❌ Failed to change the owning permissions for ' . $this->workingDirectory);
+            $feedback->advance('❌ Failed to change the owning permissions for ' . $this->workingDirectory);
             return $next($feedback);
         }
 
@@ -64,7 +62,7 @@ class FixProjectPermissions extends StepAlways
         ]);
         $process->run();
         if (!$process->isSuccessful()) {
-            $feedback->advance('', '❌ Failed to change the owning permissions for ' . $this->workingDirectory);
+            $feedback->advance('❌ Failed to change the owning permissions for ' . $this->workingDirectory);
             return $next($feedback);
         }
 
@@ -73,7 +71,7 @@ class FixProjectPermissions extends StepAlways
             [$this->workingDirectory, $this->user, 'www-data']
         );
 
-        $feedback->advance('', $feedbackFormat);
+        $feedback->advance($feedbackFormat);
 
         return $next($feedback);
     }

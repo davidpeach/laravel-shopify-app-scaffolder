@@ -1,23 +1,21 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 
 class ScaffoldPhpTesting extends StepAlways
 {
-    public function question()
-    {
-        return 'Would you like to setup PHP Tests for this project?';
-    }
-
     public function handle($feedback, $next)
     {
-        $feedback->feedback('PHP Testing scaffolding', 'Setting up PHP test helpers.');
+        $feedback->feedback(
+            'Setting up PHP test helpers.',
+            'PHP Testing scaffolding'
+        );
 
         $this->createEscTestCaseFile();
 
-        $feedback->feedback('', '✅ Testing helpers added.');
+        $feedback->feedback('✅ Testing helpers added.');
 
         return $next($feedback);
     }

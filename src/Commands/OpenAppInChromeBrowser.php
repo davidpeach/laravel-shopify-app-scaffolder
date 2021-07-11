@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 use Symfony\Component\Process\Process;
@@ -9,7 +9,10 @@ class OpenAppInChromeBrowser extends StepAlways
 {
     public function handle($feedback, $next)
     {
-        $feedback->feedback('Final Installation.', 'Installing your app into your dev store and opening in a chrome browser.');
+        $feedback->feedback(
+            'Installing your app into your dev store and opening in a chrome browser.',
+            'Finalize Installation.'
+        );
 
         $process = new Process([
             'google-chrome',
@@ -19,7 +22,7 @@ class OpenAppInChromeBrowser extends StepAlways
 
         $process->run();
 
-        $feedback->advance('', '✅ App opening in chrome browser');
+        $feedback->advance('✅ App opened in chrome browser');
 
         return $next($feedback);
     }

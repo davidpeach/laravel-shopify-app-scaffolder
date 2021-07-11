@@ -1,27 +1,25 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 use Illuminate\Support\Facades\File;
 
 class SetupJsAdminDirectory extends StepAlways
 {
-    public function question()
-    {
-        return 'Would you like to setup the initial shopify admin directory?';
-    }
-
     public function handle($feedback, $next)
     {
-        $feedback->feedback('Shopify admin directory', 'Setting up the JS admin directory for the Shopify admin.');
+        $feedback->feedback(
+            'Setting up the JS admin directory for the Shopify admin.',
+            'Shopify admin directory'
+        );
 
         $this->setupJsAdmin();
         $this->replaceWebRoutesFile();
         $this->setupAdminBladeFile();
         $this->setupAdminController();
 
-        $feedback->advance('', '✅ Admin directory set up.');
+        $feedback->advance('✅ Admin directory set up.');
 
         return $next($feedback);
     }
@@ -49,7 +47,6 @@ class SetupJsAdminDirectory extends StepAlways
             file_get_contents(base_path('routes/web.php'))
         );
 
-        // Create the new routes/web.php from stub
         file_put_contents(
             base_path('routes/web.php'),
             file_get_contents(__DIR__ . '/../stubs/routes/web.php.stub')

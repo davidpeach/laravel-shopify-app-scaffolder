@@ -1,5 +1,5 @@
 {
-    "name": "davidpeach/esc-app-scaffolder",
+    "name": "davidpeach/laravel-shopify-app-scaffolder",
     "description": "Scaffolding shopify apps with often repeated steps",
     "require-dev": {
         "phpunit/phpunit": "^9.5"
@@ -16,13 +16,13 @@
     },
     "autoload": {
         "psr-4": {
-            "DavidPeach\\EscAppScaffolder\\": "src/"
+            "DavidPeach\\ShopifyAppScaffolder\\": "src/"
         }
     },
     "extra" : {
         "laravel": {
             "providers": [
-                "DavidPeach\\EscAppScaffolder\\EscAppScaffolderServiceProvider"
+                "DavidPeach\\ShopifyAppScaffolder\\ShopifyAppScaffolderServiceProvider"
             ]
         }
     }

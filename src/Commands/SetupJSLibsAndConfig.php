@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 
@@ -32,14 +32,12 @@ class SetupJSLibsAndConfig extends StepAlways
         'vue-template-compiler' => '^2.6.12',
     ];
 
-    public function question()
-    {
-        return 'Would you like to install the recommended NPM packages?';
-    }
-
     public function handle($feedback, $next)
     {
-        $feedback->feedback('JavaScript libraries and Config', 'Setting up the required JavaScript libraries and configuration files for your app.');
+        $feedback->feedback(
+            'Setting up the required JavaScript libraries and configuration files for your app.',
+            'JavaScript libraries and Config'
+        );
 
         $this->installWebpackMixFile();
         $this->setupTypescriptDefinitionsFile();
@@ -48,7 +46,7 @@ class SetupJSLibsAndConfig extends StepAlways
         $this->setupEsLint();
         $this->installNpmPackages();
 
-        $feedback->advance('', '✅ Libraries and configuration complete.');
+        $feedback->advance('✅ Libraries and configuration complete.');
 
         return $next($feedback);
     }

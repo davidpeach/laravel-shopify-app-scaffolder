@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 
@@ -8,7 +8,10 @@ class RunNpmDev extends StepAlways
 {
     public function handle($feedback, $next)
     {
-        $feedback->feedback('NPM compiling', 'Compiling your front-end assets with npm.');
+        $feedback->feedback(
+            'Compiling your front-end assets with npm.',
+            'NPM compiling'
+        );
 
         $output = $this->asyncProcess(
             ['npm', 'run', 'dev'],
@@ -17,7 +20,7 @@ class RunNpmDev extends StepAlways
             }
         );
 
-        $feedback->advance('', '✅ Front-end assets compiled.');
+        $feedback->advance('✅ Front-end assets compiled.');
 
         return $next($feedback);
     }

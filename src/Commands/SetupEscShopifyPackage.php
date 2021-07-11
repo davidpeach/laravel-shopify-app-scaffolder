@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 
@@ -12,7 +12,10 @@ class SetupEscShopifyPackage extends StepAlways
 
     public function handle($feedback, $next)
     {
-        $feedback->feedback('ESC Shopify Package', 'Setting up the ESC Shopify package composer package.');
+        $feedback->feedback(
+            'Setting up the ESC Shopify package composer package.',
+            'ESC Shopify Package'
+        );
 
         $this->installPackage();
         $this->updateConfig();
@@ -20,7 +23,7 @@ class SetupEscShopifyPackage extends StepAlways
         $this->createShopModel();
         $this->addShopifyUserTraitToUserModel();
 
-        $feedback->advance('', '✅ ESC Shopify package setup complete');
+        $feedback->advance('✅ ESC Shopify package setup complete');
 
         return $next($feedback);
     }
@@ -33,8 +36,6 @@ class SetupEscShopifyPackage extends StepAlways
                 return strpos($string, 'Package manifest generated successfully') !== false;
             }
         );
-
-        //$this->report($output);
     }
 
     private function updateConfig()
@@ -54,8 +55,6 @@ class SetupEscShopifyPackage extends StepAlways
                 return strpos($string, 'Publishing complete') !== false;
             }
         );
-
-        //$this->report($output);
     }
 
     private function createShopModel()

@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 use Symfony\Component\Process\Process;
@@ -9,7 +9,10 @@ class OpenPartnersForLogin extends StepAlways
 {
     public function handle($feedback, $next)
     {
-        $feedback->feedback('Shopify Partners.', 'Attempting to open Shopify Partners website in a chrome browser.');
+        $feedback->feedback(
+            'Attempting to open Shopify Partners website in a chrome browser.',
+            'Shopify Partners.'
+        );
 
         $partnersId = env('SHOPIFY_PARTNERS_ID', '');
 
@@ -22,11 +25,11 @@ class OpenPartnersForLogin extends StepAlways
         $process->run();
 
         if (!$process->isSuccessful()) {
-            $feedback->advance('', '❌ Failed to open Shopify Partners website. Please head there now.');
+            $feedback->advance('❌ Failed to open Shopify Partners website. Please head there now.');
             return $next($feedback);
         }
 
-        $feedback->advance('', '✅ Partners opened in chrome browser');
+        $feedback->advance('✅ Partners opened in chrome browser');
 
         return $next($feedback);
     }

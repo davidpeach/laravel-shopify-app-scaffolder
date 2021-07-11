@@ -1,6 +1,6 @@
 <?php
 
-namespace DavidPeach\EscAppScaffolder\Commands;
+namespace DavidPeach\ShopifyAppScaffolder\Commands;
 
 use DavidPeach\BaseCommand\StepAlways;
 use Dotenv\Dotenv;
@@ -10,12 +10,15 @@ class ReloadEnv extends StepAlways
 {
     public function handle($feedback, $next)
     {
-        $feedback->feedback('Reloading .env', 'Reloading your .env file.');
+        $feedback->feedback(
+            'Reloading your .env file.',
+            'Reloading .env'
+        );
 
         with(Dotenv::create(app()->environmentPath(), app()->environmentFile()))->overload();
         with(new LoadConfiguration())->bootstrap(app());
 
-        $feedback->advance('', '✅ .env file reloaded');
+        $feedback->advance('✅ .env file reloaded');
 
         return $next($feedback);
     }

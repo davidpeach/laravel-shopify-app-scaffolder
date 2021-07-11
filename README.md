@@ -1,4 +1,4 @@
-# ESC App Scaffolder
+# Laravel/Vue/Typescript Shopify App Scaffolder
 
 Quick-starting shopify app development in Laravel. Using Vue JS and Typescript too.
 

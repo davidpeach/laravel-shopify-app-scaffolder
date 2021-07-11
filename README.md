@@ -2,7 +2,7 @@
 
 Quick-starting shopify app development in Laravel. Using Vue JS and Typescript too.
 
-Note: This is built on top of another package of mine: [https://github.com/davidpeach/laravel-base-command](Laravel Base Command).
+Note: This is built on top of another package of mine: (https://github.com/davidpeach/laravel-base-command)[Laravel Base Command].
 
 ## Installation
 

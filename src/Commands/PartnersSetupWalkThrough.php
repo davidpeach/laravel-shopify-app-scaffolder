@@ -35,7 +35,7 @@ class PartnersSetupWalkThrough extends StepAlways
         $envFileContents = file_get_contents(base_path('.env'));
         $envFileContents = str_replace('APP_URL', '#APP_URL', $envFileContents);
         file_put_contents(base_path('.env'), $envFileContents);
-        file_put_contents(base_path('.env'), 'APP_URL=' . $appUrl . PHP_EOL, FILE_APPEND);
+        file_put_contents(base_path('.env'), PHP_EOL . 'APP_URL=' . $appUrl . PHP_EOL, FILE_APPEND);
 
         $feedback->feedback('✅ Your .env file has also been updated with the correct app url (APP_URL in your .env)');
 

@@ -32,11 +32,10 @@ You will also need a self-signed SSL certificate. This is a stipulation of Shopi
 # Examples coming soon
 ```
 
-
 ## Usage
 
 Run the following command and follow the directions.
 
 ```bash
-php artisan esc:utils:scaffold
+php artisan peach:shopify:scaffold
 ```

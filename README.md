@@ -1,11 +1,11 @@
 # ESC App Scaffolder
 
-Quick-starting shopify app development for Eastide Co.
+Quick-starting shopify app development in Laravel. Using Vue JS and Typescript too.
 
 ## Installation
 
 ```bash
-composer require --dev davidpeach/esc-app-scaffolder
+composer require --dev davidpeach/laravel-shopify-app-scaffolder
 ```
 
 ## Before Usage
@@ -19,8 +19,10 @@ To enable it to do so, please add your Shopify Partner id into you project's `.e
 SHOPIFY_PARTNERS_ID=12345
 ```
 
+you should also login to your partners account before running this command in order for it to oprn the correct page for you.
+
 ### Setup your local Nginx configuration
-Setup your local nginx configuration for the app you are building, so that it is available at a valid local URL.
+Set up your local nginx configuration for the app you are building, so that it is available at a valid local URL.
 
 You will also need a self-signed SSL certificate. This is a stipulation of Shopify and their Apps.
 
@@ -31,7 +33,7 @@ You will also need a self-signed SSL certificate. This is a stipulation of Shopi
 
 ## Usage
 
-Run the following command, answering yes / no to the questions you are asked.
+Run the following command and follow the directions.
 
 ```bash
 php artisan esc:utils:scaffold
